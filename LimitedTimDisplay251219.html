@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta name="robots" content="noindex">
     <style>
-        body { margin: 0; padding: 0; background: transparent; overflow: hidden; }
+        /* 期間外はここが効いて「中身」は消える */
         #limited-content { display: none; }
+
         .box {
             padding: 15px;
             border: 2px solid #ff4444;
@@ -18,36 +19,38 @@
         }
     </style>
 </head>
-<body>
+<body style="margin: 0; padding: 0; background: transparent;">
 
-<div id="limited-content" style="display:none;">
-    <div id="inner-box" class="box">
+<div id="limited-content">
+    <div class="box">
         <strong>【テスト表示】</strong><br>
-        テスト表示
+        ここに内容を書く
     </div>
 </div>
 
 <script>
     (function() {
-        var start = 20251218; // 開始日
-        var end   = 20251218; // 終了日
+        var start = 20251218; // ここで期間設定
+        var end   = 20251218; 
 
         var n = new Date();
         var today = parseInt(n.getFullYear() + ('0' + (n.getMonth() + 1)).slice(-2) + ('0' + n.getDate()).slice(-2));
 
-        var content = document.getElementById('limited-content');
-        
+        var target = document.getElementById('limited-content');
+
         if (today >= start && today <= end) {
-            content.style.display = 'block';
-            // 表示される時は、中身の高さを測って親に送る
-            var h = document.getElementById('inner-box').offsetHeight;
-            window.parent.postMessage({type: 'gh-pages-size', height: h + 20}, '*');
+            // 期間内の場合：普通に表示
+            target.style.display = 'block';
         } else {
-            // 表示されない時は、高さ0を親に送る
-            window.parent.postMessage({type: 'gh-pages-size', height: 0}, '*');
+            // 期間外の場合：完全に消して、クリックも透過させる
+            target.style.display = 'none';
+            // もしJimdo側でiframeの高さが残っても、中身を「透明」にして邪魔させない
+            document.body.style.opacity = "0";
+            document.body.style.pointerEvents = "none";
         }
     })();
 </script>
+
 <!-- 以下のタグをJimdo内のページに書き込みます。（編集できなくなるので削除しかできません）
     ページの再読込はキャッシュではなく矯正読込 Ctrl+Shift+R
         <iframe src="https://tatesui.github.io/pubhtmls/LimitedTimDisplay251219.html" 
