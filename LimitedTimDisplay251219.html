@@ -2,8 +2,9 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="robots" content="noindex"> <style>
-        body { margin: 0; padding: 0; background: transparent; }
+    <meta name="robots" content="noindex">
+    <style>
+        body { margin: 0; padding: 0; background: transparent; overflow: hidden; }
         #limited-content { display: none; }
         .box {
             padding: 15px;
@@ -20,7 +21,7 @@
 <body>
 
 <div id="limited-content" style="display:none;">
-    <div class="box">
+    <div id="inner-box" class="box">
         <strong>【テスト表示】</strong><br>
         テスト表示
     </div>
@@ -34,8 +35,16 @@
         var n = new Date();
         var today = parseInt(n.getFullYear() + ('0' + (n.getMonth() + 1)).slice(-2) + ('0' + n.getDate()).slice(-2));
 
+        var content = document.getElementById('limited-content');
+        
         if (today >= start && today <= end) {
-            document.getElementById('limited-content').style.display = 'block';
+            content.style.display = 'block';
+            // 表示される時は、中身の高さを測って親に送る
+            var h = document.getElementById('inner-box').offsetHeight;
+            window.parent.postMessage({type: 'gh-pages-size', height: h + 20}, '*');
+        } else {
+            // 表示されない時は、高さ0を親に送る
+            window.parent.postMessage({type: 'gh-pages-size', height: 0}, '*');
         }
     })();
 </script>
