@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="robots" content="noindex"> <style>
+        body { margin: 0; padding: 0; background: transparent; }
+        #limited-content { display: none; }
+        .box {
+            padding: 15px;
+            border: 2px solid #ff4444;
+            background-color: #fff5f5;
+            border-radius: 8px;
+            color: #333;
+            font-size: 14px;
+            line-height: 1.5;
+            font-family: sans-serif;
+        }
+    </style>
+</head>
+<body>
+
+<div id="limited-content">
+    <div class="box">
+        <strong>【テスト表示】</strong><br>
+        テスト表示
+    </div>
+</div>
+
+<script>
+    (function() {
+        var start = 20251219; // 開始日
+        var end   = 20251220 // 終了日
+
+        var n = new Date();
+        var today = parseInt(n.getFullYear() + ('0' + (n.getMonth() + 1)).slice(-2) + ('0' + n.getDate()).slice(-2));
+
+        if (today >= start && today <= end) {
+            document.getElementById('limited-content').style.display = 'block';
+        }
+    })();
+</script>
+
+</body>
+</html>
